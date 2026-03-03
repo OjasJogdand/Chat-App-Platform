@@ -1,6 +1,6 @@
-# 💬 Chatify — Real-Time Chat Application
+# 💬 ConnectHub — Real-Time Chat Application
 
-Chatify is a full-stack real-time chat application built using the MERN stack and Socket.IO, enabling users to securely authenticate, manage profiles, and exchange messages instantly without page refresh.
+ConnectHub is a full-stack real-time chat application built using the MERN stack and Socket.IO, enabling users to securely authenticate, manage profiles, and exchange messages instantly without page refresh.
 
 The project focuses on:
 - Clean backend architecture
