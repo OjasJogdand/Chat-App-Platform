@@ -3,6 +3,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useAuthStore } from "./useAuthStore";
 
+const API_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
 export const useChatStore=create((set,get)=>({
     messages:[],
     users:[],
@@ -13,7 +15,7 @@ export const useChatStore=create((set,get)=>({
         set({isUsersLoading:true});
         try
         {
-          const res=await axios.get("http://localhost:3000/api/message/users",{withCredentials:true});
+          const res=await axios.get(`${API_URL}/api/message/users`,{withCredentials:true});
           set({users:res.data});
           toast.success("secccfull");
         }
@@ -31,7 +33,7 @@ export const useChatStore=create((set,get)=>({
         set({isMessagesLoading:true});
         try
         {
-            const res=await axios.get(`http://localhost:3000/api/message/${userId}`,{withCredentials:true});
+            const res=await axios.get(`${API_URL}/api/message/${userId}`,{withCredentials:true});
             set({messages:res.data});
         }
         catch(err)
@@ -47,7 +49,7 @@ export const useChatStore=create((set,get)=>({
         const {selectedUser,messages}=get();
         try
         {
-            const res=await axios.post(`http://localhost:3000/api/message/send/${selectedUser._id}`,messageData,{withCredentials:true});
+            const res=await axios.post(`${API_URL}/api/message/send/${selectedUser._id}`,messageData,{withCredentials:true});
             set({messages:[...messages,res.data]});
         }
         catch(err)

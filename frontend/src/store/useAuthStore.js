@@ -3,6 +3,8 @@ import axios from "axios"
 import toast from "react-hot-toast";
 import {io} from "socket.io-client";
 
+const API_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
 export const useAuthStore=create((set,get)=>({
     authUser:null,
     isSigningUp:false,
@@ -14,7 +16,7 @@ export const useAuthStore=create((set,get)=>({
     checkAuth: async ()=>{
         try
         {
-        const res=await axios.get("http://localhost:3000/api/auth/check",{withCredentials:true});
+        const res=await axios.get(`${API_URL}/api/auth/check`,{withCredentials:true});
         set({authUser:res.data});
         get().connectSocket();
         }
@@ -31,7 +33,7 @@ export const useAuthStore=create((set,get)=>({
         set({isSigningUp:true});;
         try
         {
-        const res=await axios.post("http://localhost:3000/api/auth/signup",data,{withCredentials:true});
+        const res=await axios.post(`${API_URL}/api/auth/signup`,data,{withCredentials:true});
         set({authUser:res.data});
         get().connectSocket();
         toast.success("succesfully signed up")
@@ -48,7 +50,7 @@ export const useAuthStore=create((set,get)=>({
     logout: async ()=>{
         try
         {
-            const res=await axios.post("http://localhost:3000/api/auth/logout",{},{withCredentials:true});
+            const res=await axios.post(`${API_URL}/api/auth/logout`,{},{withCredentials:true});
             set({authUser:null});
             get().disconnectSocket();
             toast.success("succesfully logged out");
@@ -62,7 +64,7 @@ export const useAuthStore=create((set,get)=>({
         set({isSigningIn:true});
         try
         {
-        const res=await axios.post("http://localhost:3000/api/auth/login",data,{withCredentials:true});
+        const res=await axios.post(`${API_URL}/api/auth/login`,data,{withCredentials:true});
         set({authUser:res.data});
         toast.success("succesfully logged in")
         get().connectSocket();
@@ -80,7 +82,7 @@ export const useAuthStore=create((set,get)=>({
         set({isUpdatingProfile:true});
         try
         {
-            const res=await axios.put("http://localhost:3000/api/auth/update",data,{withCredentials:true});
+            const res=await axios.put(`${API_URL}/api/auth/update`,data,{withCredentials:true});
             set({authUser:res.data});
             toast.success("succefully updated");
         }
@@ -96,7 +98,7 @@ export const useAuthStore=create((set,get)=>({
     connectSocket: ()=>{
         const {authUser}=get();
         if(!authUser) return;
-        const socket=io("http://localhost:3000",{withCredentials:true,query:{userId:authUser._id}});
+        const socket=io(API_URL,{withCredentials:true,query:{userId:authUser._id}});
         set({socket:socket});
         socket.connect();
         socket.on("getOnlineUsers",(keys)=>{
